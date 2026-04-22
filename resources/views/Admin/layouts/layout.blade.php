@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" style="font-size: 104%">
+<html lang="id" style="font-size: 104%">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GeizAdmin</title>
-    <link rel="icon" href="./favicon.ico" />
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title', 'Dashboard') — Buku Tamu</title>
+    <link rel="icon" href="/favicon.ico" />
 
     <!-- Hugeicons Free Icon Font -->
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
@@ -20,7 +20,7 @@
 
     <!-- Tailwind CSS (CDN Config & Engine) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./assets/js/tailwind-config.js"></script>
+    <script src="/assets/js/tailwind-config.js"></script>
     <style type="text/tailwindcss">
 @layer utilities {
   .glass-panel {
@@ -38,8 +38,6 @@
   .stat-card {
     @apply cursor-pointer rounded-2xl bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-soft dark:bg-dark-card dark:shadow-soft-dark dark:border dark:border-transparent;
   }
-
-  /* Subtle Entrance Animations */
 
   /* Modal transitions */
   .modal {
@@ -87,7 +85,6 @@
       opacity: 0;
       transform: translateY(10px);
     }
-
     to {
       opacity: 1;
       transform: translateY(0);
@@ -98,62 +95,13 @@
     animation: fade-in-up 0.5s ease-out forwards;
   }
 
-  .delay-1 {
-    animation-delay: 0.1s;
-  }
-
-  .delay-2 {
-    animation-delay: 0.2s;
-  }
-
-  .delay-3 {
-    animation-delay: 0.3s;
-  }
-
-  .delay-4 {
-    animation-delay: 0.4s;
-  }
-
-  /* Simple CSS Bar Chart Simulation */
-  .bar-chart {
-    display: flex;
-    align-items: flex-end;
-    gap: 12px;
-    height: 200px;
-    padding-top: 20px;
-  }
-
-  .bar {
-    flex: 1;
-    background: linear-gradient(to top, #3b82f6, #93c5fd);
-    border-radius: 6px 6px 0 0;
-    transition: height 1s ease-out;
-    position: relative;
-  }
-
-  .bar:hover {
-    opacity: 0.8;
-  }
-
-  .bar span {
-    position: absolute;
-    top: -24px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 10px;
-    color: #64748b;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .bar:hover span {
-    opacity: 1;
-  }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
 
   /* Collapsed Sidebar Rules */
-  aside.w-20 {
-    align-items: center;
-  }
+  aside.w-20 { align-items: center; }
   aside.w-20 .p-6 {
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -167,9 +115,7 @@
     justify-content: center;
     padding: 0;
   }
-  aside.w-20 .mb-10 img {
-    margin: 0;
-  }
+  aside.w-20 .mb-10 img { margin: 0; }
   aside.w-20 .flex-col.gap-8 {
     gap: 1.5rem;
     width: 100%;
@@ -193,12 +139,8 @@
     font-size: 1.25rem !important;
     margin: 0 !important;
   }
-  aside.w-20 .sidebar-link .sidebar-text {
-    display: none !important;
-  }
-  aside.w-20 .new-badge {
-    display: none !important;
-  }
+  aside.w-20 .sidebar-link .sidebar-text { display: none !important; }
+  aside.w-20 .new-badge { display: none !important; }
   aside.w-20 .mt-auto {
     width: 100%;
     display: flex;
@@ -219,12 +161,8 @@
     background: transparent !important;
     margin: 0 auto;
   }
-  aside.w-20 [data-dropdown-toggle] .flex-1 {
-    display: none !important;
-  }
-  aside.w-20 [data-dropdown-toggle] > i {
-    display: none !important;
-  }
+  aside.w-20 [data-dropdown-toggle] .flex-1 { display: none !important; }
+  aside.w-20 [data-dropdown-toggle] > i { display: none !important; }
   aside.w-20 #profileDropdown {
     left: 50% !important;
     transform: translateX(-50%) translateY(0.5rem) !important;
@@ -233,12 +171,7 @@
   }
 }
 
-
-  /* ==============================
-     RESPONSIVE UTILITIES (FIXED)
-     ============================== */
-
-  /* Mobile sidebar overlay */
+  /* RESPONSIVE UTILITIES */
   @media (max-width: 767px) {
     aside {
       position: fixed !important;
@@ -253,26 +186,18 @@
     aside.translate-x-0 {
       transform: translateX(0) !important;
     }
-
-    /* Ensure main content takes full width on mobile */
     main {
       width: 100vw !important;
       max-width: 100vw !important;
       flex: 1 1 100% !important;
     }
-
-    /* Content scroll padding inside main */
     .content-scroll {
       padding: 1rem !important;
     }
   }
 
-  /* Modal: bottom sheet on mobile */
   @media (max-width: 639px) {
-    .modal {
-      padding: 0;
-      align-items: flex-end;
-    }
+    .modal { padding: 0; align-items: flex-end; }
     .modal-dialog {
       width: 100% !important;
       max-width: 100% !important;
@@ -282,23 +207,12 @@
     }
   }
 
-        /* Sidebar Collapse Gaps & Dividers (Ultra Tight) */
-  aside.w-20 .flex.flex-col.gap-8 {
-    gap: 0.25rem !important; /* Extremely small gap between sections */
-  }
-  aside.w-20 .sidebar-text {
-    display: none !important; /* Remove titles from flow entirely */
-  }
-  aside.w-20 .space-y-2 {
-    space-y: 0 !important; /* Remove link spacing */
-  }
-  aside.w-20 .space-y-2 > * + * {
-    margin-top: 0.125rem !important; /* Tightest link stacking */
-  }
-  .sidebar-divider {
-    display: none;
-    margin: 0 auto;
-  }
+  /* Sidebar Collapse Gaps & Dividers */
+  aside.w-20 .flex.flex-col.gap-8 { gap: 0.25rem !important; }
+  aside.w-20 .sidebar-text { display: none !important; }
+  aside.w-20 .space-y-2 { space-y: 0 !important; }
+  aside.w-20 .space-y-2 > * + * { margin-top: 0.125rem !important; }
+  .sidebar-divider { display: none; margin: 0 auto; }
   aside.w-20 .sidebar-divider {
     display: block;
     padding: 0 !important;
@@ -306,6 +220,7 @@
   }
 
 </style>
+    @yield('styles')
   </head>
   <body
     class="flex h-dvh w-full overflow-hidden bg-slate-50 font-sans text-slate-900 selection:bg-brand-100 selection:text-brand-900 dark:bg-dark-bg dark:text-stone-50 dark:selection:bg-brand-900/30 dark:selection:text-brand-100"
@@ -316,11 +231,11 @@
         <!-- Logo area -->
         <div class="mb-10 flex cursor-pointer items-center gap-3 px-2">
           <img
-            src="./assets/svg/logo.svg"
-            alt="GeizAdmin Logo"
+            src="/assets/svg/logo.svg"
+            alt="Buku Tamu Logo"
             class="h-8 w-8 drop-shadow-sm transition-transform duration-300 hover:-translate-y-1"
           />
-          <span class="sidebar-text text-2xl font-extrabold tracking-tight text-slate-800 transition-opacity duration-300 whitespace-nowrap overflow-hidden dark:text-stone-100">Geiz<span class="text-brand-600 dark:text-brand-500">Admin</span></span>
+          <span class="sidebar-text text-2xl font-extrabold tracking-tight text-slate-800 transition-opacity duration-300 whitespace-nowrap overflow-hidden dark:text-stone-100">Buku<span class="text-brand-600 dark:text-brand-500">Tamu</span></span>
         </div>
 
         <!-- Nav Links -->
@@ -330,7 +245,7 @@
               Overview
             </p>
             <i class="hgi-stroke hgi-more-horizontal sidebar-divider text-xl text-slate-400 transition-opacity duration-300 dark:text-stone-500"></i>
-            <a href="./index.html" class="sidebar-link active">
+            <a href="{{ route('admin.dashboard') }}" class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
               <i class="hgi-stroke hgi-home-01 text-lg"></i>
               <span class="sidebar-text transition-opacity duration-300 whitespace-nowrap overflow-hidden">Dashboard</span>
             </a>
@@ -341,15 +256,27 @@
               Data
             </p>
             <i class="hgi-stroke hgi-more-horizontal sidebar-divider text-xl text-slate-400 transition-opacity duration-300 dark:text-stone-500"></i>
-            <a href="./customer.html" class="sidebar-link ">
+            <a href="{{ route('admin.guests.index') }}" class="sidebar-link {{ request()->routeIs('admin.guests.*') ? 'active' : '' }}">
               <i class="hgi-stroke hgi-user-multiple text-lg"></i>
-              <span class="sidebar-text transition-opacity duration-300 whitespace-nowrap overflow-hidden">Tamu</span>
-              <span
-                class="new-badge ml-auto rounded-full bg-brand-100 px-2 py-0.5 text-[10px] font-bold text-brand-700 transition-opacity duration-300 whitespace-nowrap overflow-hidden dark:bg-brand-500/20 dark:text-brand-300"
-                >NEW</span>
+              <span class="sidebar-text transition-opacity duration-300 whitespace-nowrap overflow-hidden">Kelola Tamu</span>
+            </a>
+            <a href="{{ route('admin.reports') }}" class="sidebar-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
+              <i class="hgi-stroke hgi-file-01 text-lg"></i>
+              <span class="sidebar-text transition-opacity duration-300 whitespace-nowrap overflow-hidden">Laporan</span>
             </a>
           </div>
 
+          <div class="space-y-2">
+            <p class="sidebar-text mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400 transition-opacity duration-300 whitespace-nowrap overflow-hidden">
+              Quick Access
+            </p>
+            <i class="hgi-stroke hgi-more-horizontal sidebar-divider text-xl text-slate-400 transition-opacity duration-300 dark:text-stone-500"></i>
+            <a href="{{ route('guestbook.form') }}" target="_blank" class="sidebar-link">
+              <i class="hgi-stroke hgi-link-square-01 text-lg"></i>
+              <span class="sidebar-text transition-opacity duration-300 whitespace-nowrap overflow-hidden">Form Tamu</span>
+              <span class="new-badge ml-auto rounded-full bg-brand-100 px-2 py-0.5 text-[10px] font-bold text-brand-700 transition-opacity duration-300 whitespace-nowrap overflow-hidden dark:bg-brand-500/20 dark:text-brand-300">LINK</span>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -360,14 +287,12 @@
             data-dropdown-toggle="profileDropdown"
             class="-mx-3 flex items-center gap-3 rounded-xl border border-transparent p-3 transition-all hover:border-slate-100 hover:bg-slate-50 dark:hover:border-transparent dark:hover:bg-dark-card"
           >
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?_=20150327203541"
-              alt="User Profile"
-              class="h-10 w-10 shrink-0 rounded-full border border-slate-200 shadow-sm"
-            />
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-brand-100 text-sm font-bold text-brand-700 shadow-sm dark:border-transparent dark:bg-brand-500/20 dark:text-brand-400">
+              AD
+            </div>
             <div class="flex flex-1 flex-col">
               <span class="text-sm font-bold text-slate-700 dark:text-stone-200">Administrator</span>
-              <span class="text-[13px] text-slate-400 dark:text-stone-500">Pro Plan</span>
+              <span class="text-[13px] text-slate-400 dark:text-stone-500">Buku Tamu</span>
             </div>
             <i class="hgi-stroke hgi-arrow-up-01 text-slate-400 dark:text-stone-500"></i>
           </div>
@@ -379,26 +304,18 @@
           >
             <div class="space-y-1 p-2">
               <a
-                href="#"
+                href="{{ route('guestbook.form') }}"
+                target="_blank"
                 class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-brand-600 dark:text-stone-400 dark:hover:bg-dark-hover dark:hover:text-brand-400"
               >
-                <i class="hgi-stroke hgi-settings-01 text-lg"></i>
-                <span class="sidebar-text transition-opacity duration-300 whitespace-nowrap overflow-hidden">Settings</span>
-              </a>
-              <a
-                href="#"
-                class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-red-50 hover:text-red-600 dark:text-stone-400 dark:hover:bg-red-500/10 dark:hover:text-red-400"
-              >
-                <i class="hgi-stroke hgi-logout-01 text-lg"></i>
-                <span class="sidebar-text transition-opacity duration-300 whitespace-nowrap overflow-hidden">Logout</span>
+                <i class="hgi-stroke hgi-link-square-01 text-lg"></i>
+                <span class="sidebar-text transition-opacity duration-300 whitespace-nowrap overflow-hidden">Buka Form Tamu</span>
               </a>
             </div>
           </div>
         </div>
       </div>
     </aside>
-
-
 
     <!-- Main Workspace -->
     <main class="relative flex h-screen flex-1 flex-col overflow-hidden">
@@ -425,194 +342,31 @@
 
         <!-- Header Actions -->
         <div class="flex items-center gap-5">
-          <!-- Search -->
-          <div class="relative hidden lg:block">
-            <i
-              class="hgi-stroke hgi-search-01 absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-400"
-            ></i>
-            <input
-              type="text"
-              placeholder="Search anything..."
-              class="w-64 rounded-xl border-none bg-slate-100/50 py-2.5 pl-10 pr-4 text-sm font-medium text-slate-700 transition-all placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-dark-hover dark:text-stone-200 dark:focus:bg-dark-hover"
-            />
-            <div class="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-1">
-              <kbd
-                class="hidden rounded border border-slate-300 bg-slate-200 px-1.5 py-0.5 text-[10px] font-bold text-slate-500 sm:inline-block dark:border-transparent dark:bg-dark-hover dark:text-stone-400"
-                >⌘</kbd
-              >
-              <kbd
-                class="hidden rounded border border-slate-300 bg-slate-200 px-1.5 py-0.5 text-[10px] font-bold text-slate-500 sm:inline-block dark:border-transparent dark:bg-dark-hover dark:text-stone-400"
-                >K</kbd
-              >
-            </div>
-          </div>
-
           <div class="hidden h-6 w-px bg-slate-200 sm:block dark:bg-stone-700"></div>
 
-          <!-- Icons -->
+          <!-- Theme Toggle -->
           <button class="theme-toggle-btn cursor-pointer p-1 text-slate-500 transition-colors hover:text-slate-800 dark:text-stone-400 dark:hover:text-stone-200">
             <i class="hgi-stroke hgi-moon-02 text-2xl dark:hidden"></i>
             <i class="hgi-stroke hgi-sun-03 text-2xl hidden dark:block"></i>
-          </button>
-          <div class="group relative">
-            <button
-              class="relative cursor-pointer p-1 text-slate-500 transition-colors hover:text-slate-800 dark:text-stone-400 dark:hover:text-stone-200"
-            >
-              <span
-                class="absolute right-0 top-0 h-2 w-2 rounded-full border-2 border-white bg-red-500 dark:border-transparent"
-              ></span>
-              <i class="hgi-stroke hgi-notification-01 text-2xl"></i>
-            </button>
-            <!-- Dropdown Menu -->
-            <div
-              class="invisible absolute right-0 z-[100] mt-3 w-80 origin-top-right translate-y-2 transform rounded-2xl border border-slate-100 bg-white opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 dark:border-transparent dark:bg-dark-card"
-            >
-              <div class="flex items-center justify-between border-b border-slate-100 p-4 dark:border-transparent">
-                <h3 class="font-bold text-slate-800 dark:text-stone-200">Notifications</h3>
-                <button class="text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
-                  Mark all as read
-                </button>
-              </div>
-              <div class="max-h-80 overflow-y-auto">
-                <a
-                  href="#"
-                  class="flex items-start gap-4 border-b border-slate-50 p-4 transition-colors hover:bg-slate-50 dark:border-transparent dark:hover:bg-dark-hover"
-                >
-                  <div
-                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400"
-                  >
-                    <i class="hgi-stroke hgi-user text-lg"></i>
-                  </div>
-                  <div>
-                    <p class="text-sm font-medium text-slate-800 dark:text-stone-200">New customer signed up</p>
-                    <p class="mt-0.5 text-xs text-slate-500 dark:text-stone-400">Alex Morgan joined the pro plan.</p>
-                    <p class="mt-1 text-[10px] font-semibold text-slate-400 dark:text-stone-500">2 MINS AGO</p>
-                  </div>
-                </a>
-                <a href="#" class="flex items-start gap-4 p-4 transition-colors hover:bg-slate-50 dark:hover:bg-dark-hover">
-                  <div
-                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
-                  >
-                    <i class="hgi-stroke hgi-tick-double-02 text-lg"></i>
-                  </div>
-                  <div>
-                    <p class="text-sm font-medium text-slate-800 dark:text-stone-200">Project "Alpha" completed</p>
-                    <p class="mt-1 text-[10px] font-semibold text-slate-400 dark:text-stone-500">YESTERDAY</p>
-                  </div>
-                </a>
-              </div>
-              <div class="border-t border-slate-100 p-3 text-center dark:border-transparent">
-                <button
-                  class="text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900 dark:text-stone-400 dark:hover:text-stone-200"
-                >
-                  View all notifications
-                </button>
-              </div>
-            </div>
-          </div>
-          <button
-            data-sheet-target="chatSheet"
-            class="cursor-pointer p-1 text-slate-500 transition-colors hover:text-slate-800 dark:text-stone-400 dark:hover:text-stone-200"
-          >
-            <i class="hgi-stroke hgi-message-01 text-2xl"></i>
           </button>
         </div>
       </header>
 
       <!-- Scrollable Content -->
+      <div class="content-scroll z-10 flex-1 overflow-y-auto p-4 sm:p-6 sm:px-10">
+        <div class="mx-auto space-y-6">
+          @yield('content')
 
-    </main>
-
-    <!-- Chat Sheet -->
-    <div id="chatSheet" class="fixed inset-0 z-[100] hidden">
-      <div
-        class="absolute inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity dark:bg-dark-card/60"
-        data-sheet-close
-      ></div>
-      <div
-        class="absolute bottom-0 right-0 top-0 flex w-full max-w-sm translate-x-full transform flex-col bg-white shadow-2xl transition-transform duration-300 ease-out dark:bg-dark-card dark:border-l dark:border-transparent"
-        id="chatSheetContent"
-      >
-        <div class="z-10 flex items-center justify-between border-b border-slate-100 bg-white p-6 dark:border-transparent dark:bg-dark-card">
-          <div class="flex items-center gap-3">
-            <div class="relative">
-              <img
-                src="https://i.pravatar.cc/150?img=32"
-                alt="Sarah"
-                class="h-10 w-10 rounded-full border border-slate-200"
-              />
-              <span
-                class="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-500"
-              ></span>
-            </div>
-            <div>
-              <h3 class="font-bold text-slate-800 dark:text-stone-100">Sarah Connor</h3>
-              <p class="text-xs font-medium text-emerald-600 dark:text-emerald-400">Online</p>
-            </div>
-          </div>
-          <button data-sheet-close class="text-slate-400 transition-colors hover:text-slate-700">
-            <i class="hgi-stroke hgi-cancel-01 text-lg"></i>
-          </button>
-        </div>
-        <div class="flex-1 space-y-4 overflow-y-auto bg-slate-50/50 p-6 dark:bg-dark-bg/50">
-          <div class="my-4 text-center text-xs font-semibold text-slate-400 dark:text-stone-600">TODAY, 9:24 AM</div>
-          <div class="flex gap-3">
-            <img
-              src="https://i.pravatar.cc/150?img=32"
-              alt="Sarah"
-              class="h-8 w-8 shrink-0 rounded-full"
-            />
-            <div class="rounded-2xl rounded-tl-sm border border-slate-100 bg-white p-3 shadow-sm dark:border-transparent dark:bg-dark-card">
-              <p class="text-sm text-slate-700 dark:text-stone-300">Hey! Did you check the latest analytics report?</p>
-              <p class="mt-1 text-right text-[10px] text-slate-400 dark:text-stone-500">9:24 AM</p>
-            </div>
-          </div>
-          <div class="flex flex-row-reverse gap-3">
-            <img
-              src="./assets/svg/logo.svg"
-              alt="Me"
-              class="h-8 w-8 shrink-0 rounded-full"
-            />
-            <div class="rounded-2xl rounded-tr-sm bg-brand-600 p-3 text-white shadow-sm">
-              <p class="text-sm">Yes, I just reviewed it. Traffic is up by 15% this week!</p>
-              <p class="mt-1 text-right text-[10px] text-brand-200">9:26 AM</p>
-            </div>
-          </div>
-          <div class="flex gap-3">
-            <img
-              src="https://i.pravatar.cc/150?img=32"
-              alt="Sarah"
-              class="h-8 w-8 shrink-0 rounded-full"
-            />
-            <div class="rounded-2xl rounded-tl-sm border border-slate-100 bg-white p-3 shadow-sm dark:border-transparent dark:bg-dark-card">
-              <p class="text-sm text-slate-700 dark:text-stone-300">
-                Awesome! Let's discuss it in the team sync later.
-              </p>
-              <p class="mt-1 text-right text-[10px] text-slate-400 dark:text-stone-500">9:28 AM</p>
-            </div>
-          </div>
-        </div>
-        <div class="z-10 border-t border-slate-100 bg-white p-4 dark:border-transparent dark:bg-dark-card">
-          <div class="flex items-center gap-2 rounded-xl bg-slate-100 px-3 py-2 dark:bg-dark-hover">
-            <button class="p-1 text-slate-400 transition-colors hover:text-brand-600 dark:hover:text-brand-400">
-              <i class="hgi-stroke hgi-attachment-01 text-lg"></i>
-            </button>
-            <input
-              type="text"
-              placeholder="Type a message..."
-              class="flex-1 border-none bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none dark:text-stone-200"
-            />
-            <button
-              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-white transition-colors hover:bg-brand-700"
-            >
-              <i class="hgi-stroke hgi-send-01"></i>
-            </button>
-          </div>
+          <!-- Footer -->
+          <footer class="mb-4 mt-12 text-center text-sm font-medium text-slate-400 dark:text-stone-500">
+            &copy; {{ date('Y') }} Buku Tamu — Open House. All rights reserved.
+          </footer>
         </div>
       </div>
-    </div>
+    </main>
 
     <!-- Global App Script -->
-    <script src="./assets/js/app.js"></script>
+    <script src="/assets/js/app.js"></script>
+    @yield('scripts')
   </body>
 </html>
