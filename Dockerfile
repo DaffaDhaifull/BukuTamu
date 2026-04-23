@@ -13,13 +13,20 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd zip pdo pdo_pgsql pdo_mysql
 
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 # Set working directory
 WORKDIR /var/www
 
-# Copy semua file ke dalam container (termasuk vendor dan .env)
+# Copy semua file ke dalam container
 COPY . .
 
-# Expose port 8000 untuk artisan serve
+# Install dependencies PHP menggunakan composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN composer install --no-dev --optimize-autoloader
+
+# Expose port 8080 untuk artisan serve
 EXPOSE 8080
 
 # Jalankan server
