@@ -17,9 +17,9 @@ class DashboardController extends Controller
 
         $recentGuests = Guest::latest()->take(5)->get();
 
-        // Guest per day for last 7 days (for bar chart)
+        // Guest per day for last 3 days (for bar chart)
         $dailyGuests = [];
-        for ($i = 6; $i >= 0; $i--) {
+        for ($i = 2; $i >= 0; $i--) {
             $date = Carbon::today()->subDays($i);
             $dailyGuests[] = [
                 'label' => $date->translatedFormat('D'),

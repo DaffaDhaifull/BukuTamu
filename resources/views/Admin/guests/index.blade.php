@@ -112,64 +112,16 @@
                 >
                   <i class="hgi-stroke hgi-edit-02 text-lg"></i>
                 </button>
-                <form method="POST" action="{{ route('admin.guests.destroy', $guest) }}" onsubmit="return confirm('Yakin ingin menghapus tamu ini?')">
-                  @csrf
-                  @method('DELETE')
-                  <button
-                    type="submit"
-                    class="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10 dark:hover:text-red-400"
-                    title="Hapus"
-                  >
-                    <i class="hgi-stroke hgi-delete-02 text-lg"></i>
-                  </button>
-                </form>
+                <button
+                  data-modal-target="deleteGuestModal-{{ $guest->id }}"
+                  class="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10 dark:hover:text-red-400"
+                  title="Hapus"
+                >
+                  <i class="hgi-stroke hgi-delete-02 text-lg"></i>
+                </button>
               </div>
             </td>
           </tr>
-
-          <!-- Edit Modal for each guest -->
-          <div id="editGuestModal-{{ $guest->id }}" class="modal modal-hidden">
-            <div class="modal-dialog w-full max-w-lg rounded-2xl bg-white p-0 shadow-2xl dark:bg-dark-card">
-              <div class="flex items-center justify-between border-b border-slate-100 p-6 dark:border-transparent">
-                <div>
-                  <h2 class="text-lg font-bold text-slate-800 dark:text-stone-100">Edit Data Tamu</h2>
-                  <p class="mt-1 text-sm text-slate-500 dark:text-stone-400">Perbarui informasi tamu</p>
-                </div>
-                <button data-modal-close class="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-dark-hover dark:hover:text-stone-200">
-                  <i class="hgi-stroke hgi-cancel-01 text-lg"></i>
-                </button>
-              </div>
-              <form method="POST" action="{{ route('admin.guests.update', $guest) }}" class="p-6">
-                @csrf
-                @method('PUT')
-                <div class="space-y-4">
-                  <div>
-                    <label class="mb-1.5 block text-sm font-semibold text-slate-700 dark:text-stone-300">Nama <span class="text-red-500">*</span></label>
-                    <input type="text" name="name" value="{{ $guest->name }}" required
-                      class="h-10 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition-all placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:border-transparent dark:bg-dark-hover dark:text-stone-200" />
-                  </div>
-                  <div>
-                    <label class="mb-1.5 block text-sm font-semibold text-slate-700 dark:text-stone-300">Asal Sekolah <span class="text-red-500">*</span></label>
-                    <input type="text" name="school" value="{{ $guest->school }}" required
-                      class="h-10 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition-all placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:border-transparent dark:bg-dark-hover dark:text-stone-200" />
-                  </div>
-                  <div>
-                    <label class="mb-1.5 block text-sm font-semibold text-slate-700 dark:text-stone-300">No. HP</label>
-                    <input type="text" name="phone_number" value="{{ $guest->phone_number }}"
-                      class="h-10 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition-all placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:border-transparent dark:bg-dark-hover dark:text-stone-200" />
-                  </div>
-                </div>
-                <div class="mt-6 flex items-center justify-end gap-3">
-                  <button type="button" data-modal-close class="h-10 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-600 transition-all hover:bg-slate-50 dark:border-transparent dark:text-stone-300 dark:hover:bg-dark-hover">
-                    Batal
-                  </button>
-                  <button type="submit" class="h-10 rounded-xl bg-brand-600 px-4 text-sm font-semibold text-white shadow-md shadow-brand-500/20 transition-all hover:bg-brand-700 active:scale-95">
-                    Simpan Perubahan
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
           @empty
           <tr>
             <td colspan="6" class="px-6 py-16 text-center">
@@ -224,6 +176,80 @@
     @endif
   </div>
 
+  @push('modals')
+  <!-- Modals for Guests -->
+  @foreach($guests as $guest)
+  <!-- Edit Modal -->
+  <div id="editGuestModal-{{ $guest->id }}" class="modal modal-hidden">
+    <div class="modal-dialog w-full max-w-lg rounded-2xl bg-white p-0 shadow-2xl dark:bg-dark-card">
+      <div class="flex items-center justify-between border-b border-slate-100 p-6 dark:border-transparent">
+        <div>
+          <h2 class="text-lg font-bold text-slate-800 dark:text-stone-100">Edit Data Tamu</h2>
+          <p class="mt-1 text-sm text-slate-500 dark:text-stone-400">Perbarui informasi tamu</p>
+        </div>
+        <button data-modal-close class="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-dark-hover dark:hover:text-stone-200">
+          <i class="hgi-stroke hgi-cancel-01 text-lg"></i>
+        </button>
+      </div>
+      <form method="POST" action="{{ route('admin.guests.update', $guest) }}" class="p-6">
+        @csrf
+        @method('PUT')
+        <div class="space-y-4">
+          <div>
+            <label class="mb-1.5 block text-sm font-semibold text-slate-700 dark:text-stone-300">Nama <span class="text-red-500">*</span></label>
+            <input type="text" name="name" value="{{ $guest->name }}" required
+              class="h-10 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition-all placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:border-transparent dark:bg-dark-hover dark:text-stone-200" />
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-semibold text-slate-700 dark:text-stone-300">Asal Sekolah <span class="text-red-500">*</span></label>
+            <input type="text" name="school" value="{{ $guest->school }}" required
+              class="h-10 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition-all placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:border-transparent dark:bg-dark-hover dark:text-stone-200" />
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-semibold text-slate-700 dark:text-stone-300">No. HP</label>
+            <input type="text" name="phone_number" value="{{ $guest->phone_number }}"
+              class="h-10 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition-all placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:border-transparent dark:bg-dark-hover dark:text-stone-200" />
+          </div>
+        </div>
+        <div class="mt-6 flex items-center justify-end gap-3">
+          <button type="button" data-modal-close class="h-10 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-600 transition-all hover:bg-slate-50 dark:border-transparent dark:text-stone-300 dark:hover:bg-dark-hover">
+            Batal
+          </button>
+          <button type="submit" class="h-10 rounded-xl bg-brand-600 px-4 text-sm font-semibold text-white shadow-md shadow-brand-500/20 transition-all hover:bg-brand-700 active:scale-95">
+            Simpan Perubahan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div id="deleteGuestModal-{{ $guest->id }}" class="modal modal-hidden">
+    <div class="modal-dialog w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-dark-card text-center">
+      <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400">
+        <i class="hgi-stroke hgi-alert-circle text-2xl"></i>
+      </div>
+      <h2 class="text-xl font-bold text-slate-800 dark:text-stone-100">Hapus Tamu?</h2>
+      <p class="mt-2 text-sm text-slate-500 dark:text-stone-400">
+        Apakah Anda yakin ingin menghapus <strong>{{ $guest->name }}</strong> dari daftar buku tamu? Data yang dihapus tidak dapat dikembalikan.
+      </p>
+      
+      <div class="mt-8 flex items-center justify-center gap-3">
+        <button type="button" data-modal-close class="flex-1 h-11 rounded-xl border border-slate-200 px-4 font-semibold text-slate-600 transition-all hover:bg-slate-50 dark:border-transparent dark:text-stone-300 dark:hover:bg-dark-hover">
+          Batal
+        </button>
+        <form method="POST" action="{{ route('admin.guests.destroy', $guest) }}" class="flex-1">
+          @csrf
+          @method('DELETE')
+          <button type="submit" class="w-full h-11 rounded-xl bg-red-600 px-4 font-semibold text-white shadow-md shadow-red-500/20 transition-all hover:bg-red-700 active:scale-95">
+            Ya, Hapus
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  @endforeach
+
   <!-- Add Guest Modal -->
   <div id="addGuestModal" class="modal modal-hidden">
     <div class="modal-dialog w-full max-w-lg rounded-2xl bg-white p-0 shadow-2xl dark:bg-dark-card">
@@ -266,6 +292,7 @@
       </form>
     </div>
   </div>
+  @endpush
 
   <!-- Validation Errors -->
   @if($errors->any())

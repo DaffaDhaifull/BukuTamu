@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') — Buku Tamu</title>
+    <title>@yield('title', 'Dashboard') — Buku Tamu SMK TI Pembangunan</title>
     <link rel="icon" href="/favicon.ico" />
 
     <!-- Hugeicons Free Icon Font -->
@@ -232,10 +232,10 @@
         <div class="mb-10 flex cursor-pointer items-center gap-3 px-2">
           <img
             src="/assets/svg/logo.svg"
-            alt="Buku Tamu Logo"
+            alt="SMK TI Pembangunan Logo"
             class="h-8 w-8 drop-shadow-sm transition-transform duration-300 hover:-translate-y-1"
           />
-          <span class="sidebar-text text-2xl font-extrabold tracking-tight text-slate-800 transition-opacity duration-300 whitespace-nowrap overflow-hidden dark:text-stone-100">Buku<span class="text-brand-600 dark:text-brand-500">Tamu</span></span>
+          <span class="sidebar-text text-xl font-extrabold tracking-tight text-slate-800 transition-opacity duration-300 whitespace-nowrap overflow-hidden dark:text-stone-100">SMK TI <span class="text-brand-600 dark:text-brand-500">Pembangunan</span></span>
         </div>
 
         <!-- Nav Links -->
@@ -288,11 +288,11 @@
             class="-mx-3 flex items-center gap-3 rounded-xl border border-transparent p-3 transition-all hover:border-slate-100 hover:bg-slate-50 dark:hover:border-transparent dark:hover:bg-dark-card"
           >
             <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-brand-100 text-sm font-bold text-brand-700 shadow-sm dark:border-transparent dark:bg-brand-500/20 dark:text-brand-400">
-              AD
+              {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 2)) }}
             </div>
             <div class="flex flex-1 flex-col">
-              <span class="text-sm font-bold text-slate-700 dark:text-stone-200">Administrator</span>
-              <span class="text-[13px] text-slate-400 dark:text-stone-500">Buku Tamu</span>
+              <span class="text-sm font-bold text-slate-700 dark:text-stone-200">{{ Auth::user()->name ?? 'Administrator' }}</span>
+              <span class="text-[13px] text-slate-400 dark:text-stone-500">Buku Tamu Admin</span>
             </div>
             <i class="hgi-stroke hgi-arrow-up-01 text-slate-400 dark:text-stone-500"></i>
           </div>
@@ -303,14 +303,16 @@
             class="dropdown-menu invisible absolute bottom-full left-0 z-50 mb-2 w-full translate-y-2 transform overflow-hidden rounded-xl border border-slate-100 bg-white opacity-0 shadow-xl transition-all duration-200 dark:border-transparent dark:bg-dark-card"
           >
             <div class="space-y-1 p-2">
-              <a
-                href="{{ route('guestbook.form') }}"
-                target="_blank"
-                class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-brand-600 dark:text-stone-400 dark:hover:bg-dark-hover dark:hover:text-brand-400"
-              >
-                <i class="hgi-stroke hgi-link-square-01 text-lg"></i>
-                <span class="sidebar-text transition-opacity duration-300 whitespace-nowrap overflow-hidden">Buka Form Tamu</span>
-              </a>
+              <form method="POST" action="{{ route('admin.logout') }}">
+                @csrf
+                <button
+                  type="submit"
+                  class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-500/10"
+                >
+                  <i class="hgi-stroke hgi-logout-01 text-lg"></i>
+                  <span class="sidebar-text transition-opacity duration-300 whitespace-nowrap overflow-hidden">Logout</span>
+                </button>
+              </form>
             </div>
           </div>
         </div>
@@ -356,11 +358,6 @@
       <div class="content-scroll z-10 flex-1 overflow-y-auto p-4 sm:p-6 sm:px-10">
         <div class="mx-auto space-y-6">
           @yield('content')
-
-          <!-- Footer -->
-          <footer class="mb-4 mt-12 text-center text-sm font-medium text-slate-400 dark:text-stone-500">
-            &copy; {{ date('Y') }} Buku Tamu — Open House. All rights reserved.
-          </footer>
         </div>
       </div>
     </main>
@@ -368,5 +365,6 @@
     <!-- Global App Script -->
     <script src="/assets/js/app.js"></script>
     @yield('scripts')
+    @stack('modals')
   </body>
 </html>
