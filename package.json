@@ -1,13 +1,45 @@
 {
     "private": true,
     "type": "module",
+    "name": "bukutamu",
+    "version": "1.0.0",
+    "main": "main.cjs",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "start": "electron main.cjs",
+        "dist": "electron-builder"
     },
     "devDependencies": {
         "axios": "^1.6.4",
+        "electron": "^41.3.0",
+        "electron-builder": "^26.8.1",
         "laravel-vite-plugin": "^1.0",
         "vite": "^5.0"
-    }
+    },
+    "build": {
+        "appId": "com.bukutamu.app",
+        "productName": "BukuTamu",
+        "directories": {
+            "output": "dist"
+        },
+        "files": [
+            "**/*"
+        ],
+        "win": {
+            "target": "nsis"
+        }
+    },
+    "description": "<p align=\"center\"><a href=\"https://laravel.com\" target=\"_blank\"><img src=\"https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg\" width=\"400\" alt=\"Laravel Logo\"></a></p>",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/DaffaDhaifull/BukuTamu.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/DaffaDhaifull/BukuTamu/issues"
+    },
+    "homepage": "https://github.com/DaffaDhaifull/BukuTamu#readme"
 }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') — Buku Tamu SMK TI Pembangunan</title>
+    <title>@yield('title', 'Dashboard') | Buku Tamu SMK TI Pembangunan</title>
     <link rel="icon" href="/favicon.ico" />
 
     <!-- Hugeicons Free Icon Font -->
@@ -366,5 +366,30 @@
     <script src="/assets/js/app.js"></script>
     @yield('scripts')
     @stack('modals')
+
+    <!-- Page Transition Loader -->
+    <div id="pageLoader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-50/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 dark:bg-dark-bg/80">
+      <div class="relative flex h-16 w-16 items-center justify-center">
+        <div class="absolute h-full w-full rounded-full border-4 border-slate-200 dark:border-stone-800"></div>
+        <div class="absolute h-full w-full rounded-full border-4 border-brand-500 border-t-transparent animate-spin"></div>
+        <img src="/assets/svg/logo.svg" class="h-6 w-6 animate-pulse" alt="Loading" />
+      </div>
+      <p class="mt-4 text-sm font-semibold text-slate-500 dark:text-stone-400">Memuat...</p>
+    </div>
+    <script>
+      window.addEventListener('beforeunload', () => {
+        const loader = document.getElementById('pageLoader');
+        if (loader) {
+          loader.classList.remove('opacity-0', 'pointer-events-none');
+        }
+      });
+      // Handle pages shown from bfcache
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted) {
+          const loader = document.getElementById('pageLoader');
+          if (loader) loader.classList.add('opacity-0', 'pointer-events-none');
+        }
+      });
+    </script>
   </body>
 </html>

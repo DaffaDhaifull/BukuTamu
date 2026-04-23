@@ -106,6 +106,9 @@
               <div class="absolute -bottom-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-slate-800 dark:bg-white"></div>
             </div>
 
+            <!-- Value Label (Always visible) -->
+            <span class="mb-1 text-xs font-bold text-slate-600 dark:text-stone-300">{{ $day['count'] }}</span>
+            
             <div
               class="w-full max-w-[80px] rounded-t-lg bg-gradient-to-t from-brand-600 to-brand-400 transition-all duration-500 hover:from-brand-700 hover:to-brand-500 dark:from-brand-500 dark:to-brand-300"
               style="height: calc({{ $maxDaily > 0 ? max(($day['count'] / $maxDaily) * 100, 4) : 4 }}% - 2rem);"

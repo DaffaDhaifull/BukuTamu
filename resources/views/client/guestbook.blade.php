@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Buku Tamu — Open House SMK TI Pembangunan</title>
+    <title>Buku Tamu | Open House SMK TI Pembangunan</title>
     <meta name="description" content="Buku tamu digital untuk acara Open House SMK TI Pembangunan." />
     <link rel="icon" href="/favicon.ico" />
 
@@ -96,24 +96,7 @@
         </p>
       </div>
 
-      <!-- Success Message -->
-      @if(session('success'))
-      <div class="fade-up mb-6 w-full max-w-lg">
-        <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 shadow-lg dark:border-emerald-500/20 dark:bg-emerald-500/10">
-          <div class="flex flex-col items-center text-center">
-            <div class="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-500/20 animate-checkmark">
-              <i class="hgi-stroke hgi-checkmark-circle-01 text-4xl text-emerald-600 dark:text-emerald-400"></i>
-            </div>
-            <h3 class="text-lg font-bold text-emerald-800 dark:text-emerald-300">Terima Kasih!</h3>
-            <p class="mt-2 text-sm text-emerald-700 dark:text-emerald-400">{{ session('success') }}</p>
-            <a href="{{ route('guestbook.form') }}" class="mt-4 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-all hover:bg-emerald-700 active:scale-95">
-              <i class="hgi-stroke hgi-add-01 text-lg"></i>
-              Isi Lagi
-            </a>
-          </div>
-        </div>
-      </div>
-      @endif
+
 
       <!-- Form Card -->
       <div class="fade-up delay-200 w-full max-w-lg">
@@ -206,6 +189,60 @@
         </div>
       </div>
     </div>
+
+    <!-- Prevent Double Submit & Loading Animation -->
+    <script>
+      document.addEventListener('submit', (e) => {
+        const form = e.target;
+        if (form.classList.contains('is-submitting')) {
+          e.preventDefault();
+          return;
+        }
+        form.classList.add('is-submitting');
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.classList.add('opacity-70', 'cursor-not-allowed', 'pointer-events-none');
+
+          const currentHeight = submitBtn.offsetHeight;
+          submitBtn.style.height = currentHeight + 'px';
+
+          submitBtn.innerHTML = `
+            <svg class="animate-spin h-5 w-5 mr-2 text-current inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Memproses...</span>
+          `;
+        }
+      });
+    </script>
+
+    <!-- Page Transition Loader -->
+    <div id="pageLoader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-50/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 dark:bg-dark-bg/80">
+      <div class="relative flex h-16 w-16 items-center justify-center">
+        <div class="absolute h-full w-full rounded-full border-4 border-slate-200 dark:border-stone-800"></div>
+        <div class="absolute h-full w-full rounded-full border-4 border-brand-500 border-t-transparent animate-spin"></div>
+        <img src="/assets/svg/logo.svg" class="h-6 w-6 animate-pulse" alt="Loading" />
+      </div>
+      <p class="mt-4 text-sm font-semibold text-slate-500 dark:text-stone-400">Memuat...</p>
+    </div>
+    <script>
+      window.addEventListener('beforeunload', () => {
+        const loader = document.getElementById('pageLoader');
+        if (loader) {
+          loader.classList.remove('opacity-0', 'pointer-events-none');
+        }
+      });
+      // Handle pages shown from bfcache
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted) {
+          const loader = document.getElementById('pageLoader');
+          if (loader) loader.classList.add('opacity-0', 'pointer-events-none');
+        }
+      });
+    </script>
 
     <!-- Theme detection -->
     <script>
