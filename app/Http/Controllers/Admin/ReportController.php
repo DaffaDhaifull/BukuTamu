@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Guest;
-use Carbon\Carbon;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -83,6 +81,6 @@ class ReportController extends Controller
         // Set paper size to A4
         $pdf->setPaper('a4', 'portrait');
 
-        return $pdf->download('Laporan_Buku_Tamu_TIP.pdf');
+        return $pdf->stream('Laporan_Buku_Tamu_TIP.pdf');
     }
 }
