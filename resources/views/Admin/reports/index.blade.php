@@ -29,13 +29,13 @@
         <h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-stone-100">Laporan Tamu</h1>
         <p class="text-sm text-slate-500 dark:text-stone-400">Rekap seluruh data tamu yang berkunjung.</p>
       </div>
-      <button
-        onclick="window.print()"
+      <a
+        href="{{ route('admin.reports.pdf', request()->query()) }}"
         class="no-print flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-600 shadow-sm transition-all hover:bg-slate-50 hover:text-slate-900 active:scale-95 dark:border-transparent dark:bg-dark-card dark:text-stone-300 dark:hover:bg-dark-hover"
       >
         <i class="hgi-stroke hgi-printer text-lg"></i>
-        <span>Cetak / Print</span>
-      </button>
+        <span>Unduh PDF</span>
+      </a>
     </div>
   </div>
 
