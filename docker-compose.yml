@@ -1,9 +1,29 @@
 services:
+  db:
+    image: postgres:15-alpine
+    container_name: bukutamu_db
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-bukutamu}
+      POSTGRES_USER: ${DB_USERNAME:-bukutamu_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-bukutamu_secret}
+    volumes:
+      - bukutamu_db_data:/var/lib/postgresql/data
+    ports:
+      - "3304:5432"
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: bukutamu_app
     ports:
-      - "8080:8080"
+      - "8002:8000"
     restart: always
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+volumes:
+  bukutamu_db_data:

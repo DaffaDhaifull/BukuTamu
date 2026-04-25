@@ -1,33 +1,39 @@
-FROM php:8.2-cli
+FROM dunglas/frankenphp:php8.2-alpine
 
-# Install system dependencies & PHP extensions (termasuk PostgreSQL untuk Supabase)
-RUN apt-get update && apt-get install -y \
-    libpq-dev \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libzip-dev \
+# Install PHP extensions required for Laravel & PostgreSQL
+RUN install-php-extensions \
+    pdo_pgsql \
+    pdo_mysql \
+    pcntl \
+    gd \
     zip \
-    unzip \
-    git \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd zip pdo pdo_pgsql pdo_mysql
+    redis
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
-WORKDIR /var/www
+WORKDIR /app
 
-# Copy semua file ke dalam container
+# Copy semua file project
 COPY . .
 
-# Install dependencies PHP menggunakan composer
+# Install dependencies PHP via Composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV COMPOSER_HTTP_TIMEOUT=600
+ENV COMPOSER_PROCESS_TIMEOUT=2000
+
+# Bypass masalah IPv6/Timeout pada Docker Packagist
+RUN composer config --global repo.packagist composer https://packagist.org
+
 RUN composer install --no-dev --optimize-autoloader
 
-# Expose port 8080 untuk artisan serve
-EXPOSE 8080
+# Install Laravel Octane & konfigurasi server untuk FrankenPHP
+RUN composer require laravel/octane --no-interaction \
+    && php artisan octane:install --server=frankenphp --no-interaction
 
-# Jalankan server
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+# Expose port 8000
+EXPOSE 8000
+
+# Jalankan server menggunakan Octane Worker Mode (FrankenPHP)
+CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--host=0.0.0.0", "--port=8000"]
