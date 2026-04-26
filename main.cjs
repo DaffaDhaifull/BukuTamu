@@ -7,7 +7,7 @@ function createWindow() {
     autoHideMenuBar: true
   });
 
-  win.loadURL('http://localhost:8000');
+  win.loadURL('https://bukutamu.dhisproject.my.id');
 }
 
 app.whenReady().then(createWindow);

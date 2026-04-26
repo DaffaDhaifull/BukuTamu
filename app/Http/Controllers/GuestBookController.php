@@ -9,7 +9,8 @@ class GuestBookController extends Controller
 {
     public function showForm()
     {
-        return view('client.guestbook');
+        $recentGuests = Guest::latest()->take(5)->get();
+        return view('client.guestbook', compact('recentGuests'));
     }
 
     public function submit(Request $request)

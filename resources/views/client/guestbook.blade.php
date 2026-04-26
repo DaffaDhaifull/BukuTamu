@@ -98,8 +98,11 @@
 
 
 
-      <!-- Form Card -->
-      <div class="fade-up delay-200 w-full max-w-lg">
+      <!-- Main Content Layout -->
+      <div class="mx-auto flex w-full max-w-5xl flex-col items-start gap-8 lg:flex-row">
+        
+        <!-- Left Column: Form Card -->
+        <div class="fade-up delay-200 w-full flex-1">
         <div class="rounded-2xl border border-slate-200/50 bg-white p-8 shadow-xl dark:border-transparent dark:bg-dark-card">
           <div class="mb-6">
             <h2 class="text-xl font-bold text-slate-800 dark:text-stone-100">Data Pengunjung</h2>
@@ -187,8 +190,41 @@
             </button>
           </form>
         </div>
+        </div>
+        
+        <!-- Right Column: Recent Guests -->
+        <div class="fade-up delay-300 w-full lg:w-[400px] shrink-0">
+          <div class="rounded-2xl border border-slate-200/50 bg-white p-6 shadow-xl dark:border-transparent dark:bg-dark-card">
+            <div class="mb-6 flex items-center gap-2">
+              <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                <i class="hgi-stroke hgi-time-02 text-lg"></i>
+              </div>
+              <h2 class="text-lg font-bold text-slate-800 dark:text-stone-100">Tamu Terbaru</h2>
+            </div>
+            
+            <div class="space-y-4">
+              @forelse($recentGuests as $guest)
+              <div class="flex items-center gap-4 rounded-xl border border-slate-100 p-3 transition-all hover:border-brand-200 hover:bg-slate-50 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-dark-hover">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-700 dark:bg-brand-500/20 dark:text-brand-400">
+                  {{ strtoupper(substr($guest->name, 0, 2)) }}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h4 class="text-sm font-bold text-slate-800 dark:text-stone-200 truncate">{{ $guest->name }}</h4>
+                  <p class="text-xs font-medium text-slate-500 dark:text-stone-400 truncate">{{ $guest->school }}</p>
+                </div>
+                <span class="text-xs font-semibold text-slate-400 dark:text-stone-500 whitespace-nowrap">{{ $guest->created_at->diffForHumans(null, true, true) }}</span>
+              </div>
+              @empty
+              <div class="flex flex-col items-center justify-center py-8 text-center">
+                <i class="hgi-stroke hgi-user-group text-4xl text-slate-300 dark:text-stone-600 mb-3"></i>
+                <p class="text-sm font-medium text-slate-400 dark:text-stone-500">Belum ada tamu terdaftar</p>
+              </div>
+              @endforelse
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
 
     <!-- Prevent Double Submit & Loading Animation -->
     <script>
